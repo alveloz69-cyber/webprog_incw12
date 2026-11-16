@@ -1,0 +1,32 @@
+<!-- TEXT: free-form, use when nothing narrower fits -->
+<input type="text" name="visitor_name">
+
+<!-- PASSWORD: masked input; value readable in JS, invisible on screen -->
+<input type="password" name="password">
+
+<!-- EMAIL: browser enforces a format + mobile shows @ key -->
+<input type="email" name="email" required>
+
+<!-- NUMBER: numeric keyboard + min/max constraints -->
+<input type="number" name="guests" min="1" max="8">
+
+<!-- TEL: numeric-pad keyboard, but NO format validation -->
+<input type="tel" name="mobile">
+
+<!-- DATE: native calendar picker, ISO yyyy-mm-dd value -->
+<input type="date" name="checkin">
+
+<!-- URL: must be an absolute URL (protocol included) -->
+<input type="url" name="website" placeholder="https://…">
+
+<!-- CHECKBOX group: independent switches, array-style name -->
+<input type="checkbox" name="hobbies[]" value="sports"> Sports
+<input type="checkbox" name="hobbies[]" value="music"> Music
+
+<!-- RADIO group: one shared name = one shared choice -->
+<input type="radio" name="account_type" value="basic"> Basic ($25)
+<input type="radio" name="account_type" value="standard" checked> Standard ($50)
+<input type="radio" name="account_type" value="deluxe"> Deluxe ($100)
+
+<!-- HIDDEN: context for the server, invisible to the user -->
+<input type="hidden" name="userid" value="137273">

@@ -1,0 +1,24 @@
+<!-- Single-choice dropdown: value sent is the selected option -->
+<label for="system">Your OS:</label>
+<select id="system" name="system">
+  <option selected>Windows</option>
+  <option>Mac</option>
+  <option>Unix</option>
+</select>
+
+<!-- Multi-select list box: hold Ctrl/Cmd to choose several.
+     Only SELECTED options are submitted; nothing if untouched. -->
+<label for="options">Optional features:</label>
+<select id="options" name="options[]" size="6" multiple>
+  <option>Chat</option>
+  <option>Email</option>
+  <option>File transfer</option>
+  <option>Directory</option>
+  <option>Shell</option>
+  <option>Remote control</option>
+</select>
+
+<!-- Textarea: NO value attribute — initial text goes between tags -->
+<textarea name="remarks" rows="10" cols="25" maxlength="140">
+I'm very pleased with your service!!!
+</textarea>

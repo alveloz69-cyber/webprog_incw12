@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 5: Native validation</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 5: Native validation</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <form>
+    <label for="name">Name <input id="name" name="name" required></label>
+    <label for="username">Username (6-15 characters)
+      <input id="username" name="username" minlength="6" maxlength="15" required>
+    </label>
+    <label for="email">Email <input id="email" name="email" type="email" required></label>
+    <label for="age">Age (16-99) <input id="age" name="age" type="number" min="16" max="99" required></label>
+    <label for="product">Product code (XX-9999)
+      <input id="product" name="product" pattern="[A-Za-z]{2}-[0-9]{4}" required>
+    </label>
+    <label for="terms">Terms and service
+        <input type="checkbox" id="term" name="term" required>
+      </label>
+    <!-- TODO: add pattern="[A-Z]{2}-[0-9]{4}" to product and a required terms checkbox. -->
+    <button type="submit">Check native rules</button>
+  </form>
+  <p id="result" role="status"></p>
+  <script>
+
+document.querySelector("form").addEventListener("submit", function (event) {
+  event.preventDefault();
+  document.querySelector("#result").textContent = "All declared HTML rules passed. Nothing sent.";
+});
+// This handler only prevents navigation. HTML performs the validation.
+  </script>
+</body>
+</html>

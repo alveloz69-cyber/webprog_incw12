@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 4: Submission and reset</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 4: Submission and reset</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <form novalidate>
+    <label for="name">Name <input id="name" name="name" required></label>
+    <label for="email">Email <input id="email" name="email" type="email" required></label>
+    <label for="role">Role <input id="role" name="role" value="Guest" required></label>
+    <button type="submit">Check form</button><button type="reset">Reset</button>
+  </form>
+  <p id="result" role="status"></p>
+  <script>
+
+const form = document.querySelector("form");
+const result = document.querySelector("#result");
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const invalid = Array.from(form.querySelectorAll("input")).filter(function (field) {
+    return !field.checkValidity();
+  });
+  invalid.forEach(function (field) { console.log(field.name + ": " + field.validationMessage); });
+  result.textContent = invalid.length ? "Check Console for failed fields." : "All declared rules passed. Nothing sent.";
+  if (invalid.length) invalid[0].focus();
+});
+form.addEventListener("reset", function (event) {
+  if (!confirm("Return all fields to their starting values?")) {
+    event.preventDefault();
+    result.textContent = "Reset cancelled. Your input is still here.";
+  } else {
+    result.textContent = "Reset accepted.";
+  }
+});
+// TODO: add a prefilled field; test that reset restores its default, not an empty string.
+const roleInput = document.querySelector("#role");
+
+form.addEventListener("reset", function (event) {
+  if (!confirm("Return all fields to their starting values?")) {
+    event.preventDefault();
+    result.textContent = "Reset cancelled. Your input is still here.";
+  } else 
+    setTimeout(function () {
+      const restored = roleInput.value === roleInput.defaultValue && roleInput.value !== "";
+      console.log("Role after reset:", roleInput.value, "| Restored default:", restored);
+      result.textContent = `Reset accepted. Role restored to "${roleInput.value}".`;
+    }, 0);
+  }
+});
+    </script>
+</body>
+</html>

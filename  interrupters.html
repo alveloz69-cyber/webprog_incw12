@@ -1,0 +1,36 @@
+<!-- SUBMIT + RESET: the two classic interrupt buttons -->
+<input type="submit" value="Sign Up">   <!-- triggers form submission -->
+<input type="reset" value="Clear">      <!-- wipes ALL controls -->
+
+<!-- JS handlers can vote before either action runs: -->
+<form action="/signup" method="post"
+      onsubmit="return checkCompleteness();"
+      onreset="return window.confirm('Are you sure you want to clear the form?');">
+  …
+</form>                     
+
+<form action="#"
+      method="post"
+      id="signup_form"
+      onreset="return window.confirm('Are you sure you want to clear the form?');"
+      onsubmit="checkCompleteness(); return false;">
+
+  <span class="mandatory">*</span>
+  <label id="name_label" for="visitor_name">Your Name:</label>
+  <input id="visitor_name" name="visitor_name" type="text" />
+
+  <span class="mandatory">*</span>
+  <label id="pass1_label" for="password1">Password:</label>
+  <input id="password1" name="password1" type="password" />
+
+  <span class="mandatory">*</span>
+  <label id="pass2_label" for="password2">Confirm Password:</label>
+  <input id="password2" name="password2" type="password" />
+
+  <span class="mandatory">*</span>
+  <input id="licenseOK" name="licenseOK" type="checkbox" />
+  <label id="licenseOK_label" for="licenseOK">I accept</label> the license conditions.
+
+  <input type="submit" value="Sign Up" />
+  <input type="reset" />
+</form>

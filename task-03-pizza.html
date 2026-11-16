@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 3: Pizza order</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 3: Pizza order</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <form>
+    <fieldset><legend>Size</legend>
+      <label><input type="radio" name="size" value="small" checked> Small</label>
+      <label><input type="radio" name="size" value="large"> Large</label>
+    </fieldset>
+    <label for="toppings">Toppings (optional, choose several)
+      <select id="toppings" name="toppings" multiple size="6">
+        <option>Mushrooms</option><option>Olives</option><option>Peppers</option><option>Pepperoni</option><option>Ham</option><option>Tomatoes</option><option>Ricotta</option><option>Mozzarella</option><option>Feta</option>
+        <!-- TODO: add at least three more toppings. -->
+      </select>
+    </label>
+    <label for="comments">Special instructions (optional, at most 200 characters)
+      <textarea id="comments" name="comments" maxlength="200" aria-describedby="remaining"></textarea>
+    </label>
+    <p id="remaining">200 characters remaining</p>
+    <input type="hidden" name="order_channel" value="practice">
+    <button type="submit">Inspect order</button>
+  </form>
+  <pre id="result" role="status"></pre>
+  <script>
+
+const form = document.querySelector("form");
+const comments = document.querySelector("#comments");
+const remaining = document.querySelector("#remaining");
+comments.addEventListener("input", function () {
+  remaining.textContent = (comments.maxLength - comments.value.length) + " characters remaining";
+});
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  document.querySelector("#result").textContent = new URLSearchParams(new FormData(form)).toString();
+});
+// Test no toppings, multiple toppings, the counter, and the hidden field.
+  </script>
+</body>
+</html>

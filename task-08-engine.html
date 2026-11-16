@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 8: Extend the rule engine</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 8: Extend the rule engine</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <form novalidate>
+    <label for="password">Practice password <input id="password" name="password" type="password" aria-describedby="passwordError" autocomplete="new-password"></label>
+    <p id="passwordError" class="field-error" aria-live="polite"></p>
+    <label for="confirm">Confirm <input id="confirm" name="confirm" type="password" aria-describedby="confirmError" autocomplete="new-password"></label>
+    <p id="confirmError" class="field-error" aria-live="polite"></p>
+    <button type="submit">Run engine</button>
+  </form>
+  <p id="result" role="status"></p>
+  <script>
+
+const form = document.querySelector("form");
+const rules = {
+  password: { required: true, minLength: 8, msg: "Use at least 8 characters." },
+  confirm: { required: true, matches: "password", msg: "Passwords must match." }
+};
+function validateForm() {
+  const invalid = [];
+  for (const [name, rule] of Object.entries(rules)) {
+    const field = form.elements.namedItem(name);
+    let ok = !rule.required || field.value.length > 0;
+    if (ok && rule.minLength !== undefined) {
+      ok = field.value.length >= rule.minLength;
+    }
+    if (ok && rule.matches) {
+      ok = field.value === form.elements.namedItem(rule.matches).value;
+    }
+    document.getElementById(name + "Error").textContent = ok ? "" : rule.msg;
+    field.setAttribute("aria-invalid", String(!ok));
+    if (!ok) invalid.push(field);
+  }
+  if (invalid.length) invalid[0].focus();
+  return invalid.length === 0;
+}
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  document.querySelector("#result").textContent = validateForm() ? "Implemented checks passed. Nothing sent." : "Fix the marked fields.";
+});
+// Before completing the TODOs, nonempty short/mismatched values still pass.
+// Afterward, test both rules independently and together.
+  </script>
+</body>
+</html>

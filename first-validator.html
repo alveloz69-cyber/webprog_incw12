@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My first validator</title>
+</head>
+<body>
+  <h1>Club interest form (practice only)</h1>
+  <form id="practiceForm" novalidate>
+    <p>
+      <label for="name">Name (at least 2 characters)</label>
+      <input id="name" name="name" required minlength="2"
+             aria-describedby="nameError">
+      <span id="nameError" aria-live="polite"></span>
+    </p>
+    <p>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required
+             aria-describedby="emailError">
+      <span id="emailError" aria-live="polite"></span>
+    </p>
+    <button type="submit">Check my form</button>
+  </form>
+  <p id="result" role="status"></p>
+
+  <script>
+    const form = document.querySelector("#practiceForm");
+    const fields = Array.from(form.querySelectorAll("input"));
+    const result = document.querySelector("#result");
+
+    function checkField(field) {
+      const valid = field.checkValidity();
+      const message = document.getElementById(field.id + "Error");
+      message.textContent = valid ? "" : field.validationMessage;
+      field.setAttribute("aria-invalid", String(!valid));
+      return valid;
+    }
+
+    fields.forEach(function (field) {
+      field.addEventListener("blur", function () {
+        checkField(field);
+      });
+      field.addEventListener("input", function () {
+        result.textContent = "";
+        if (field.getAttribute("aria-invalid") === "true") {
+          checkField(field);
+        }
+      });
+    });
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const invalidFields = fields.filter(function (field) {
+        return !checkField(field);
+      });
+      if (invalidFields.length > 0) {
+        result.textContent = "Please correct the marked fields.";
+        invalidFields[0].focus();
+      } else {
+        result.textContent = "Valid for this practice form. Nothing sent or saved.";
+      }
+    });
+  </script>
+</body>
+</html>

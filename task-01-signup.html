@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 1: named controls</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 1: named controls</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <form>
+    <label for="visitor">Name <input id="visitor" name="visitor_name"></label>
+    <label for="password">Practice password <input id="password" name="password" type="password" autocomplete="new-password"></label>
+    <label><input name="licenseOK" type="checkbox" value="yes"> Accept conditions</label>
+    <fieldset><legend>Account type</legend>
+      <label><input type="radio" name="account_type" value="basic"> Basic ($25)</label>
+      <label><input type="radio" name="account_type" value="standard" checked> Standard ($50)</label>
+      <label><input type="radio" name="account_type" value="deluxe"> Deluxe ($100)</label>
+    </fieldset>
+    <label for="system">OS <select id="system" name="system"><option>Windows</option><option>Mac</option><option>Unix</option></select></label>
+    <label for="remarks">Comments <textarea id="remarks" name="remarks"></textarea></label>
+    <label for="userid">userid<input type="hidden" id="userid" name="user_id" value="'12345"></label>
+    <button type="submit">Inspect data</button><button type="reset">Reset</button>
+  </form>
+  <pre id="result" role="status"></pre>
+  <script>
+const form = document.querySelector("form");
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const data = new FormData(form);
+  if (data.has("password")) data.set("password", "[not displayed]");
+  document.querySelector("#result").textContent =
+    new URLSearchParams(data).toString();
+});
+  </script>
+</body>
+</html>

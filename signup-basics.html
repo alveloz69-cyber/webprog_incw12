@@ -1,0 +1,18 @@
+<!-- The form container: WHERE data goes and HOW it travels -->
+<form action="/signup" method="post">
+
+  <!-- Text control: name= becomes the submitted key -->
+  <label for="visitor_name">Your Name</label>
+  <input id="visitor_name" name="visitor_name" type="text">
+
+  <!-- Hidden context field: submitted, but invisible -->
+  <input type="hidden" name="userid" value="137273">
+
+  <!-- Checkbox: on/off switch, its own name -->
+  <input id="lic" name="licenseOK" type="checkbox" value="yes">
+  <label for="lic">I accept the license conditions</label>
+
+  <button type="submit">Sign Up</button>
+  <button type="reset">Reset</button>
+</form>
+

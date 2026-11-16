@@ -1,0 +1,18 @@
+Scenario:
+A visitor removes required from an email input in DevTools.
+The browser accepts an empty value. A real server receives it.
+
+1. What changed in the browser? Removing the required from an email inputchanges the DOM element in the user's local brower memory, making it so the browser allows the form to submit with an empty string.
+2. Which server rule must still reject the value? The server required validation will reject any input where the email field is missing, null, empty, or just white-space only.
+3. What helpful message should the client display? It should display a clear specific message that is linked by aria-describedby that says something like "Enter an email address (example:name@example.com )
+4. Why does hiding a control not make it trustworthy? 
+
+Evidence:
+Action I performed in my own local practice page: Deleteing the required part from <input type="email" required>
+Expected behavior: With reuired removed, I assume that it would still passby submissions. 
+Actual behavior: Since required was removed, the brower bypassed the validations on the client-side and allowed the empty email value to pass submission.
+Client responsibility: The cilent responsibility is to give immediatem accessible feedbak to help users fix their mistakes before they submit. 
+Server responsibility: The server responsibility is to treat all incoming request data as untrusted, and independently enforces required, type/format, and authorization checks before processing or storring data.
+
+Do not send requests to a real endpoint for this exercise.
+There is no backend to implement for CampusConnect.

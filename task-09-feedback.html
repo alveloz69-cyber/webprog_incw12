@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 9: Accessible password feedback</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 9: Accessible password feedback</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <div id="summary" tabindex="-1" hidden></div>
+  <form novalidate>
+    <label for="password">Practice password
+      <input id="password" name="password" type="password" required minlength="8" aria-describedby="rules passwordError" autocomplete="new-password">
+    </label>
+    <ul id="rules"></ul>
+    <p id="passwordError" class="field-error" aria-live="polite"></p>
+    <button type="submit">Check requirements</button>
+  </form>
+  <p id="result" role="status"></p>
+  <script>
+
+const form = document.querySelector("form");
+const password = document.querySelector("#password");
+const summary = document.querySelector("#summary");
+const rules = [
+  { label: "At least 8 characters", test: function (v) { return v.length >= 8; } },
+  { label: "An uppercase letter", test: function (v) { return /[A-Z]/.test(v); } }
+  { label: "A lowercase letter", test: function (v) { return /[a-z]/.test(v); } },
+  { label: "A digit", test: function (v) { return /[0-9]/.test(v); } },
+  { label: "A symbol", test: function (v) { return /[^A-Za-z0-9\s]/.test(v); } }];
+function update() {
+  const list = document.querySelector("#rules");
+  list.replaceChildren();
+  rules.forEach(function (rule) {
+    const item = document.createElement("li");
+    item.textContent = (rule.test(password.value) ? "Met: " : "Needed: ") + rule.label;
+    list.appendChild(item);
+  });
+}
+password.addEventListener("input", function () {
+  update();
+  summary.hidden = true;
+  document.querySelector("#result").textContent = "";
+  if (password.getAttribute("aria-invalid") === "true") showError();
+});
+function showError() {
+  const missing = rules.filter(function (rule) { return !rule.test(password.value); });
+  password.setAttribute("aria-invalid", String(missing.length > 0));
+  document.querySelector("#passwordError").textContent = missing.map(function (rule) { return rule.label; }).join("; ");
+  return missing.length === 0;
+}
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  if (showError()) {
+    summary.hidden = true;
+    document.querySelector("#result").textContent = "Implemented requirements met. Nothing sent.";
+  } else {
+    summary.replaceChildren();
+    const heading = document.createElement("h2");
+    heading.textContent = "There is a problem";
+    const link = document.createElement("a");
+    link.href = "#password";
+    link.textContent = "Review the password requirements";
+    link.addEventListener("click", function (event) { event.preventDefault(); password.focus(); });
+    summary.append(heading, link);
+    summary.hidden = false;
+    summary.focus();
+  }
+});
+update();
+  </script>
+</body>
+</html>

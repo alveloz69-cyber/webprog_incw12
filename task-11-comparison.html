@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 11: Custom checks and Parsley</title>
+  <style>
+    body { font: 1rem/1.6 system-ui; max-width: 48rem; margin: 2rem auto; padding: 1rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select, textarea, button { font: inherit; max-width: 100%; }
+    button { margin: 1rem .5rem 0 0; }
+    [aria-invalid="true"] { outline: 2px solid #b00020; }
+    .field-error { color: #b00020; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+    :focus-visible { outline: 3px solid #3459be; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Task 11: Custom checks and Parsley</h1>
+  <p>Practice only. Use fictional data. Nothing is sent or saved.</p>
+
+  <h2>Custom validator</h2>
+  <form id="custom" novalidate>
+    <label for="nameA">Name <input id="nameA" name="name" required></label>
+    <label for="emailA">Email <input id="emailA" name="email" type="email" required></label>
+    <label for="passwordA">Practice password (8+ characters) <input id="passwordA" name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+    <label for="confirmA">Confirm <input id="confirmA" name="confirm" type="password" required autocomplete="new-password"></label>
+    <button type="submit">Check custom form</button>
+  </form>
+  <h2>Parsley validator</h2>
+  <form id="library" novalidate>
+    <label for="nameB">Name <input id="nameB" name="name" required></label>
+    <label for="emailB">Email <input id="emailB" name="email" type="email" required></label>
+    <label for="passwordB">Practice password (8+ characters) <input id="passwordB" name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+    <label for="confirmB">Confirm <input id="confirmB" name="confirm" type="password" required data-parsley-equalto="#passwordB" autocomplete="new-password"></label>
+    <button type="submit" disabled id="libraryButton">Check Parsley form</button>
+  </form>
+  <p id="libraryStatus" role="status">Loading public libraries...</p>
+  <p id="result" role="status"></p>
+  <script>
+
+const custom = document.querySelector("#custom");
+custom.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const password = document.querySelector("#passwordA");
+  const confirm = document.querySelector("#confirmA");
+  confirm.setCustomValidity("");
+  if (password.value !== confirm.value) {
+    confirm.setCustomValidity("Passwords must match.");
+  }
+  document.querySelector("#result").textContent = custom.reportValidity() ? "Custom checks passed. Nothing sent." : "Correct the custom form.";
+});
+document.querySelector("#library").addEventListener("submit", function (event) {
+  event.preventDefault();
+});
+function loadScript(url) {
+  return new Promise(function (resolve, reject) {
+    const script = document.createElement("script");
+    script.src = url;
+    script.onload = resolve;
+    script.onerror = function () { reject(new Error("Could not load " + url)); };
+    document.head.appendChild(script);
+  });
+}
+loadScript("https://code.jquery.com/jquery-3.7.1.min.js")
+  .then(function () { return loadScript("https://cdn.jsdelivr.net/npm/parsleyjs@2.9.2/dist/parsley.min.js"); })
+  .then(function () {
+    const parsley = window.jQuery("#library").parsley();
+    parsley.on("form:submit", function () {
+      document.querySelector("#result").textContent = "Parsley checks passed. Nothing sent.";
+      return false;
+    });
+    document.querySelector("#libraryButton").disabled = false;
+    document.querySelector("#libraryStatus").textContent = "Parsley ready.";
+  })
+  .catch(function (error) {
+    document.querySelector("#libraryStatus").textContent = error.message + ". The library form is unavailable; the custom form still works.";
+    console.error(error);
+  });
+  </script>
+</body>
+</html>
